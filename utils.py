@@ -1,7 +1,6 @@
 import csv
 import logging
 import time
-from collections import Counter, defaultdict
 from itertools import chain, combinations
 from pathlib import Path
 from typing import Any, List, Tuple, Union
@@ -44,7 +43,6 @@ def createFPTree(transactions: list[list[str]], haderTble: dict, frequency: list
     tran = [item for item in tran if item in haderTble.keys()]
     if len(tran) != 0:
         tran = sorted(tran, key=lambda item:haderTble[item][0], reverse=True)
-        print(tran)
         updateTree(tran, root, haderTble, frequency[idx])
   return root
 
@@ -102,9 +100,6 @@ def mineTree(headerTable, minSup, prefix, freqItemSet):
     freqItemSet.append(freqSet)
     # 找conditional pattern base
     pattern_base, pattern_base_freq = conPatternBase(item, headerTable)
-    print(item)
-    print("-"*175)
-    print(f"pattern base : {pattern_base}  |  pattern base count : {pattern_base_freq}\n")
     conditionalTree, newHeaderTable = createConditionalTree(pattern_base,pattern_base_freq, minSup)
     if newHeaderTable != None:
       mineTree(newHeaderTable, minSup, freqSet, freqItemSet)
@@ -143,7 +138,6 @@ def turn_two_array(L1, minSup):
   freq_itemSet = []
   frequency = []
   for key, val in L1.items():
-    print(key)
     if val >= minSup:
       freq_itemSet.append({key})
       frequency.append(val)
