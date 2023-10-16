@@ -49,6 +49,16 @@ def main():
     filename = Path(a.dataset).stem
     # # TODO: you have to implement this function by yourself
     start = time.time()
+    fp_growth_out = FPG(data_path, a.min_sup, a.min_conf)
+    end = time.time()
+    print(f"fpgrowth runtime : {round(end-start, 4)}")
+    # Write output to file
+    write_file(
+        data=fp_growth_out,
+        filename=config.OUT_DIR / f"{filename}-fp_growth-{a.min_sup}-{a.min_conf}.csv"
+    )
+    # # TODO: you have to implement this function by yourself
+    start = time.time()
     apriori_out = Apriori(data_path, a.min_sup, a.min_conf)
     end = time.time()
     print(f"apriori runtime : {round(end-start, 4)}")
@@ -58,16 +68,6 @@ def main():
         filename=config.OUT_DIR / f"{filename}-apriori-{a.min_sup}-{a.min_conf}.csv"
     )
 
-    # # TODO: you have to implement this function by yourself
-    start = time.time()
-    fp_growth_out = FPG(data_path, a.min_sup, a.min_conf)
-    end = time.time()
-    print(f"fpgrowth runtime : {round(end-start, 4)}")
-    # Write output to file
-    write_file(
-        data=fp_growth_out,
-        filename=config.OUT_DIR / f"{filename}-fp_growth-{a.min_sup}-{a.min_conf}.csv"
-    )
 
 if __name__ == "__main__":
     main()

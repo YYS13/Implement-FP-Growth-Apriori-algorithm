@@ -92,17 +92,18 @@ def createConditionalTree(pattern_base,pattern_base_freq, minSup):
   return conditionalTree, table
 
 #Mine Tree
-def mineTree(headerTable, minSup, prefix, freqItemSet):
+def mineTree(headerTable, minSup, prefix, freqItemSet, freqItemsetWithCount):
   sorted_item = [item[0] for item in sorted(list(headerTable.items()), key=lambda p:p[1][0])]
   for item in sorted_item:
     freqSet = prefix.copy()
     freqSet.add(item)
     freqItemSet.append(freqSet)
+    freqItemsetWithCount[frozenset(freqSet)] = headerTable[item][0]
     # 找conditional pattern base
     pattern_base, pattern_base_freq = conPatternBase(item, headerTable)
     conditionalTree, newHeaderTable = createConditionalTree(pattern_base,pattern_base_freq, minSup)
     if newHeaderTable != None:
-      mineTree(newHeaderTable, minSup, freqSet, freqItemSet)
+      mineTree(newHeaderTable, minSup, freqSet, freqItemSet, freqItemsetWithCount)
 # power set
 def powerSet(itemSet):
   return chain.from_iterable(combinations(itemSet, r) for r in range(1, len(itemSet)))
@@ -116,16 +117,16 @@ def countSup(itemSet, transactions):
   return count
 
 #association rule
-def associationRule(freqItemSet, transactions, minConf):
+def associationRule(freqItemSet, transactions, minConf, freqItemsetWithCount):
   rules = []
   for itemSet in freqItemSet:
     subSets = powerSet(itemSet)
-    set_support = countSup(itemSet, transactions)
+    set_support = freqItemsetWithCount[frozenset(itemSet)]
 
     for s in subSets:
       subSet = set(s)
-      x = countSup(subSet, transactions)
-      y = countSup((itemSet - subSet), transactions)
+      x = freqItemsetWithCount[frozenset(subSet)]
+      y = freqItemsetWithCount[frozenset(itemSet - subSet)]
       confidence = float(set_support / x)
       lift = float(set_support * len(transactions) / (x*y))
       if confidence >= minConf:
@@ -266,8 +267,9 @@ def FPG(data_path, minSupRatio, minConfRatio):
     frequency = [1 for i in range(len(transcations))]
     FPtree = createFPTree(transcations, haderTable, frequency)
     freqItemList = []
-    mineTree(haderTable, min_sup, set(), freqItemList)
-    rules = associationRule(freqItemList, transcations, minConfRatio)
+    freqItemsetWithCount = {}
+    mineTree(haderTable, min_sup, set(), freqItemList, freqItemsetWithCount)
+    rules = associationRule(freqItemList, transcations, minConfRatio, freqItemsetWithCount)
     print(len(freqItemList))
     print(len(rules))
     return rules
@@ -294,7 +296,10 @@ def Apriori(data_path, minSupRatio, minConfRatio):
             itemSet_freq = itemSet_freq + local_freq
         level += 1
     freqItemList = freqItemList + local
-    rules = associationRule(freqItemList, transcations, minConfRatio)
+    freqItemsetWithCount = {}
+    for freqSet in freqItemList:
+      freqItemsetWithCount[frozenset(freqSet)] = countSup(freqSet, transcations)
+    rules = associationRule(freqItemList, transcations, minConfRatio, freqItemsetWithCount)
     print(len(freqItemList))
     print(len(rules))
     return rules

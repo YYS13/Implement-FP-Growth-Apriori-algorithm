@@ -1,0 +1,13 @@
+2023-10-16 17:27:48,749 [main.py:44] INFO: Arguments: Namespace(min_sup=0.1, min_conf=0.3, dataset='ibm-2023.txt')
+2023-10-16 17:29:32,120 [grading.py:100] INFO: ================= Filepaths =================
+2023-10-16 17:29:32,121 [grading.py:101] INFO: input file: C:\Users\yoush\Desktop\DM_project1\outputs\ibm-2023-fp_growth-0.1-0.3.csv
+2023-10-16 17:29:32,121 [grading.py:102] INFO: reference file: C:\Users\yoush\Desktop\DM_project1\outputs\sup0.1_conf0.3_ans.csv
+2023-10-16 17:29:32,122 [grading.py:111] INFO: Rules not in reference:
+2023-10-16 17:29:32,124 [grading.py:116] INFO: =================Results=================
+2023-10-16 17:29:32,126 [grading.py:117] INFO: Pass: True
+2023-10-16 17:30:03,520 [grading.py:100] INFO: ================= Filepaths =================
+2023-10-16 17:30:03,520 [grading.py:101] INFO: input file: C:\Users\yoush\Desktop\DM_project1\outputs\ibm-2023-apriori-0.1-0.3.csv
+2023-10-16 17:30:03,521 [grading.py:102] INFO: reference file: C:\Users\yoush\Desktop\DM_project1\outputs\sup0.1_conf0.3_ans.csv
+2023-10-16 17:30:03,521 [grading.py:111] INFO: Rules not in reference:
+2023-10-16 17:30:03,523 [grading.py:116] INFO: =================Results=================
+2023-10-16 17:30:03,523 [grading.py:117] INFO: Pass: True
